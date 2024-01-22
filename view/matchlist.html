@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        li {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .red-button {
+            background-color: #ff3333;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .green-button {
+            background-color: #00d142;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .back-button {
+            background-color: #8e9600;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+    <title>Match List</title>
+</head>
+<body>
+    <h1>Match List</h1>
+
+    <form id="searchForm" onsubmit="submitSearch()">
+        <input type="text" id="searchInput" placeholder="Search matches...">
+        <button type="submit">Search</button>
+    </form>
+    
+    <ul id="matchList">
+        
+    </ul>
+
+    <a class="back-button" href="main.html">Back</a>
+
+    <script>
+
+function submitSearch() {
+        event.preventDefault();
+
+        const searchInputValue = document.getElementById('searchInput').value.trim();
+        if (searchInputValue != '') {
+            const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('filter', searchInputValue);
+            window.location.href = currentUrl.toString();
+        }
+    }
+
+    function getJSON() {
+        var queryParams = new URLSearchParams(window.location.search);
+        var parameterValue = queryParams.get('filter');
+        console.log('Parameter Value:', parameterValue);
+        var restAdress = 'http://localhost:8080/matches'
+        if (parameterValue != null) {
+            restAdress += '/' + parameterValue
+        }
+        
+        fetch(restAdress, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(json => populateMatchList(json));
+    }
+
+
+    function populateMatchList(json) {
+        const matchList = document.getElementById('matchList');
+
+        json.forEach(match_json => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <strong>Match ID:</strong> ${match_json._id}<br>
+                <strong>Home Country:</strong> ${match_json.country_home}<br>
+                <strong>Guest Country:</strong> ${match_json.country_guest}<br>
+                <strong>Score:</strong> ${match_json.country_home_score}:${match_json.country_guest_score}<br>
+                <button class="red-button" onclick="deleteMatch('${match_json._id}')">Delete</button>
+                <a class="green-button" href="updatematch.html?filter=${match_json._id}">Edit</a>
+                <hr>
+            `;
+            matchList.appendChild(listItem);
+        });
+    }
+
+    async function deleteMatch(matchId) {
+        try {
+            const response = await fetch(`http://localhost:8080/matches/${matchId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                console.error('Failed to delete match');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    window.onload = getJSON();
+
+    </script>
+</body>
+</html>

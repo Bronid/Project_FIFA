@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./view
+    ports:
+      - "80:80"
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
