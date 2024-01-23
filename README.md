@@ -10,31 +10,47 @@ project-root
 
 │
 
-├── api
+├── node_modules
 
-│ ├── app.js
+│ ├── app.mjs
 
-│ ├── routes
+│ ├── Dockerfile
 
-│ │ ├── apiRoutes.js
-
-│ │ └── ...
+│ ├── package-lock.json
 
 │ └── package.json
 
 │
 
-├── frontend
+├── user_api
 
-│ ├── index.html
+│ ├── app.mjs
 
-│ ├── styles.css
+│ ├── Dockerfile
 
-│ └── scripts.js
+│ ├── package-lock.json
+
+│ └── package.json
 
 │
 
-├── Dockerfile
+├── view
+
+│ ├── addmatch.html
+
+│ ├── Dockerfile
+
+│ ├── login.html
+
+│ ├── main.html
+
+│ ├── matchlist.html
+
+│ ├── register.html
+
+│ └── updatematch.html
+
+│
 
 └── docker-compose.yml
 
