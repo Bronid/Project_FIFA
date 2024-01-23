@@ -85,25 +85,24 @@ app.get('/matches', async (req, res) => {
 app.get('/matches/:nameparam', async (req, res) => {
   let dbo = mongoc.db('FIFA');
   let conditionByName = {
-      $or: [
-          { country_guest: req.params.nameparam },
-          { country_home: req.params.nameparam }
-      ]
+    $or: [
+      { country_guest: req.params.nameparam },
+      { country_home: req.params.nameparam }
+    ]
   };
   let result = await dbo.collection('Match').find(conditionByName).toArray();
 
   if (result.length === 0) {
-      try {
-          let conditionById = { _id: new ObjectId(req.params.nameparam) };
-          result = await dbo.collection('Match').find(conditionById).toArray();
-      } catch (error) {
-          console.error('Invalid ObjectId:', error.message);
-      }
+    try {
+      let conditionById = { _id: new ObjectId(req.params.nameparam) };
+      result = await dbo.collection('Match').find(conditionById).toArray();
+    } catch (error) {
+      console.error('Invalid ObjectId:', error.message);
+    }
   }
 
   res.json(result);
 });
-
 
 /**
  * @swagger
@@ -127,23 +126,27 @@ app.get('/matches/:nameparam', async (req, res) => {
  *                 type: integer
  *               country_guest_score:
  *                 type: integer
+ *               user_score:
+ *                 type: integer
  *           example:
  *             date: "13-09-2013"
  *             country_home: "Team A"
  *             country_guest: "Team B"
  *             country_home_score: 2
  *             country_guest_score: 1
+ *             user_score: 0
  *     responses:
  *       '200':
  *         description: Successful response
  *         content:
  *           application/json:
  *             example:
- *                 date: "13-09-2013"
- *                 country_home: "Team A"
- *                 country_guest: "Team B"
- *                 country_home_score: 2
- *                 country_guest_score: 1
+ *               date: "13-09-2013"
+ *               country_home: "Team A"
+ *               country_guest: "Team B"
+ *               country_home_score: 2
+ *               country_guest_score: 1
+ *               user_score: 0
  */
 app.post('/addmatch', async (req, res) => {
   let dbo = mongoc.db('FIFA');
@@ -176,9 +179,9 @@ app.delete('/matches/:nameparam', async (req, res) => {
 
   if (result.deletedCount == 1) {
     res.json({ message: 'Match deleted successfully' });
-} else {
+  } else {
     res.json({ message: 'Match not found or not deleted' });
-}
+  }
 });
 
 /**
@@ -211,12 +214,15 @@ app.delete('/matches/:nameparam', async (req, res) => {
  *                 type: integer
  *               country_guest_score:
  *                 type: integer
+ *               user_score:
+ *                 type: integer
  *             example:
  *               date: "13-09-2013"
  *               country_home: "Team A"
  *               country_guest: "Team B"
  *               country_home_score: 2
  *               country_guest_score: 1
+ *               user_score: 0
  *     responses:
  *       '200':
  *         description: Successful response
@@ -228,6 +234,7 @@ app.delete('/matches/:nameparam', async (req, res) => {
  *               country_guest: "Team B"
  *               country_home_score: 2
  *               country_guest_score: 1
+ *               user_score: 0
  */
 app.put('/updatematches/:nameparam', async (req, res) => {
   let dbo = mongoc.db('FIFA');
@@ -240,9 +247,11 @@ app.put('/updatematches/:nameparam', async (req, res) => {
       country_guest: req.body.country_guest,
       country_home_score: req.body.country_home_score,
       country_guest_score: req.body.country_guest_score,
+      user_score: req.body.user_score,
     },
   };
 
   let result = await dbo.collection('Match').updateOne(id, updateDocument);
   res.json(result);
 });
+
