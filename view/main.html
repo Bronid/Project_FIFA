@@ -32,6 +32,14 @@
             color: white;
             border-radius: 5px;
         }
+
+        .logout-btn {
+            text-decoration: none;
+            padding: 10px;
+            background-color: #f44336;
+            color: white;
+            border-radius: 5px;
+        }
     </style>
     <title>Main Page</title>
     <style>
@@ -51,6 +59,29 @@
         <li><a href="register.html">Register Page</a></li>
         <li><a href="http://localhost:8080/api-docs">Swagger Docs Match API</a></li>
         <li><a href="http://localhost:8081/api-docs">Swagger Docs User API</a></li>
+
+        <li id="logout-container"></li>
     </ul>
+
+    <script>
+
+        if (document.cookie) {
+            const logoutContainer = document.getElementById('logout-container');
+            const logoutButton = document.createElement('a');
+            logoutButton.href = '#';
+            logoutButton.className = 'logout-btn';
+            logoutButton.innerText = 'Logout';
+
+            logoutButton.addEventListener('click', function() {
+                document.cookie = `userLogin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+                document.cookie = `userPassword=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+                location.reload();
+                alert('Logged out successfully!');
+            });
+
+            logoutContainer.appendChild(logoutButton);
+        }
+    </script>
 </body>
 </html>
+

@@ -123,7 +123,6 @@
 
         async function giveScore(matchId) {
             try {
-                // Получаем логин и пароль из кукис
                 const login = getCookie("userLogin");
                 const password = getCookie("userPassword");
                 console.log('Received login:', login);
@@ -140,7 +139,6 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    // Если успешно, обновляем user_score в матче
                     await updateMatch(matchId);
                 } else {
                     console.error('Failed to give score:', result.message);

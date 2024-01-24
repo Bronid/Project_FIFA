@@ -81,14 +81,12 @@ app.listen(8081, () => {
 app.post('/users/register', async (req, res) => {
   const dbo = mongoc.db('FIFA');
 
-  // Check if the user with the same login already exists
   const existingUser = await dbo.collection('Users').findOne({ login: req.body.login });
   if (existingUser) {
     res.status(400).json({ message: 'User with this login already exists' });
     return;
   }
 
-  // Add the new user to the Users collection
   const result = await dbo.collection('Users').insertOne(req.body);
 });
 
@@ -127,8 +125,6 @@ app.post('/users/register', async (req, res) => {
  */
 app.post('/users/login', async (req, res) => {
   const dbo = mongoc.db('FIFA');
-
-  // Check if the user with the provided login and password exists
   const user = await dbo.collection('Users').findOne({ login: req.body.login, password: req.body.password });
   if (user) {
     res.json(user);
@@ -170,7 +166,6 @@ app.post('/users/login', async (req, res) => {
 app.post('/users/givescore', async (req, res) => {
     const dbo = mongoc.db('FIFA');
   
-    // Check if the user exists
     const user = await dbo.collection('Users').findOne({ login: req.body.login, password: req.body.password });
 
     if (!user) {
@@ -178,13 +173,11 @@ app.post('/users/givescore', async (req, res) => {
       return;
     }
   
-    // Check if the user has enough score
     if (user.score <= 0) {
       res.status(400).json({ success: false, message: 'User has insufficient score' });
       return;
     }
-  
-    // Update user's score and add the score to the Match collection
+
     const result = await Promise.all([
       dbo.collection('Users').updateOne({ login: req.body.login, password: req.body.password }, { $inc: { score: -1 } }),
     ]);
