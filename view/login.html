@@ -68,7 +68,6 @@
     <div id="result"></div>
 
     <script>
-        // Check for existing login data in cookies on page load
         document.addEventListener('DOMContentLoaded', () => {
         const cookies = document.cookie.split('; ')
             .reduce((acc, cookie) => {
@@ -108,13 +107,10 @@
             if (response.ok) {
                 document.getElementById('result').innerHTML = `Login successful. User ID: ${result._id}, Score: ${result.score}`;
 
-                // Set user data in a cookie
                 
                 document.cookie = `userLogin=${result.login}; expires=${new Date(Date.now() + 86400000).toUTCString()}; path=/`;
                 document.cookie = `userPassword=${result.password}; expires=${new Date(Date.now() + 86400000).toUTCString()}; path=/`;
 
-
-                // Redirect to main.html
                 window.location.href = 'main.html';
             } else {
                 document.getElementById('result').innerHTML = `Login failed. ${result.message}`;
