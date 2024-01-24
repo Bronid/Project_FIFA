@@ -239,15 +239,20 @@ app.delete('/matches/:nameparam', async (req, res) => {
 app.put('/updatematches/:nameparam', async (req, res) => {
   let dbo = mongoc.db('FIFA');
   let id = { _id: new ObjectId(req.params.nameparam) };
+  let match = await dbo.collection('Match').findOne(id);
 
+  if (req.body.got_user_score != null){
+    match.user_score += 1
+  }
+  
   let updateDocument = {
     $set: {
-      date: req.body.date,
-      country_home: req.body.country_home,
-      country_guest: req.body.country_guest,
-      country_home_score: req.body.country_home_score,
-      country_guest_score: req.body.country_guest_score,
-      user_score: req.body.user_score,
+      date: req.body.date || match.date,
+      country_home: req.body.country_home || match.country_home,
+      country_guest: req.body.country_guest || match.country_guest,
+      country_home_score: req.body.country_home_score || match.country_home_score,
+      country_guest_score: req.body.country_guest_score || match.country_guest_score,
+      user_score: req.body.user_score || match.user_score,
     },
   };
 

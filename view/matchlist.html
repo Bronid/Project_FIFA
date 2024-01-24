@@ -152,12 +152,12 @@
 
         async function updateMatch(matchId) {
             try {
-                const response = await fetch(`http://localhost:8080/matches/${matchId}`, {
+                const response = await fetch(`http://localhost:8080/updatematches/${matchId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ user_score: 1 }), // Увеличиваем на 1, можно изменить логику
+                    body: JSON.stringify({ got_user_score: true }),
                 });
 
                 if (response.ok) {
