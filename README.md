@@ -1,3 +1,5 @@
+# UPD: That old repo with simple nodejs api, the api from this repo was used [here](https://github.com/Bronid/FIFA_GoogleCloudDeploy)
+
 # Analysis of the Football Likes Application
 ![Tekst alternatywny](https://github.com/Olaz0/pai/blob/main/photo/photo_2024-01-23_19-27-20.jpg?raw=true)
 ## Introduction
